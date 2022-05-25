@@ -1,0 +1,106 @@
+% Alban Guyon (20206315)
+% Université de Montréal
+% 2105 - Informatique théorique
+% May 24, 2022
+% Used starting template from: https://guides.nyu.edu/LaTeX/sample-document
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=0.5in]{geometry}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\title{Introduction à l'informatique théorique -- 2005 devoir 11}
+\author{Alban Guyon}
+\date{May 24, 2022}
+
+\begin{document}
+    \maketitle
+    
+    \section{Questions}
+    
+    \textbf{1}
+    Pour representer une liste de nombres entiers en un seul nombre entier on utilise la notation suivante:
+    \begin{equation}
+    [a_1, a_2, a_3, ..., a_n, 0, 0, 0, ...] = 2^{a_1} * 3^{a_2} * 5^{a_3} * ... * p^{a_n}
+    \end{equation}
+    où les bases des exponents sont les nombres premiers.
+
+    Du fait que chaque entier positif a une factorisation unique en nombres premiers, chaque liste
+    sera associé à un nombre unique superieur ou égal à 1.
+
+    Une autre chose à noter est que toutes les listes sont infinis: une liste avec n elements à réelement n
+    éléments et une infinité de 0 qui suivent. En effet, les 0 à la fin d'une liste sont ignorés. 
+    Par exemple, la liste [2, 3, 4, 3, 2, 0, 0] est equivalente à [2, 3, 4, 3, 2]
+
+    Dans le pseudo-code, on utilise la notation $P_i$ pour representer le i-ème nombre premier.	
+    Voici quelques fonctions sur les listes dans cette nouvelle représentation:
+
+    \begin{algorithm}
+        \caption{Vide}\label{Vide}
+        \begin{algorithmic}[1]
+        \Procedure{Vide()}{}
+        \State $\textit{$r_0$} \gets \text{1}$
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{EstVide?}\label{EstVide?}
+        \begin{algorithmic}[1]
+        \Procedure{EstVide?($r_1$)}{}
+        \If {$\textit{$r_1$} = \text{1}$}
+            \State $\textit{$r_0$} \gets \text{TRUE}$
+        \Else {}
+            \State $\textit{$r_0$} \gets \text{FALSE}$
+        \EndIf
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Dans?}\label{Dans?}
+        \begin{algorithmic}[1]
+        \Procedure{Dans?($r_1, r_2$)}{}
+        \State $r_1 \gets \text{FALSE}$
+        \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{on utilise $r_1$ pour la limite max car taille de la liste est forcément inférieur}
+            \If {$\textit{$r_1$} \mod \text{$P_{i}^{r_2}$} = 0$ $\textbf{and not}$ $\textit{$r_0$}$}
+                \State $\textit{N} \gets n / P_{i}^{r_2}$ \Comment{on enleve $r_1$ fois le même facteur premier}
+                \If {$N \mod (P_{i}^{r_2}) \neq 0$} \Comment{on s'assure qu'il n'y a pas d'autre diviseurs}
+                    \State $\textit{$r_1$} \gets \text{TRUE}$
+                \EndIf
+            \EndIf
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Card}\label{Card}
+        \begin{algorithmic}[1]
+        \Procedure{Card($r_1$)}{}
+        \State $\textit{$r_0$} \gets \text{0}$
+        \For {$i \gets 0$ \textbf{to} $r_1$}
+            \If {$n \mod (P_{i}^{r_1}) = 0$}
+                \State $\textit{$r_0$} \gets \textit{$i$} + 1$\Comment{l'indice du dernier element non nul + 1 est la taille}
+            \EndIf
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Ajouter}\label{Ajouter}
+        \begin{algorithmic}[1]
+        \Procedure{Ajouter($r_2, r_1$)}{}
+        \State $\textit{$SIZE$} \gets Card(r_1)$
+        \State $\textit{$r_0$} \gets r_1 * P_{SIZE}^{r_2}$
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+\end{document} % This is the end of the document
