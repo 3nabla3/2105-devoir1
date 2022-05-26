@@ -1,7 +1,7 @@
 % Alban Guyon (20206315)
 % Université de Montréal
 % 2105 - Informatique théorique
-% May 24, 2022
+% May 23, 2022
 % Used starting template from: https://guides.nyu.edu/LaTeX/sample-document
 
 \documentclass{article}
@@ -16,7 +16,7 @@
 
 \title{Introduction à l'informatique théorique -- 2005 devoir 11}
 \author{Alban Guyon}
-\date{May 24, 2022}
+\date{May 23, 2022}
 
 \begin{document}
     \maketitle
@@ -24,20 +24,20 @@
     \section{Questions}
     
     \textbf{1}
-    Pour representer une liste de nombres entiers en un seul nombre entier on utilise la notation suivante:
+    Pour représenter une liste de nombres entiers en un seul nombre entier on utilise la notation suivante:
     \begin{equation}
     [a_1, a_2, a_3, ..., a_n, 0, 0, 0, ...] = 2^{a_1} * 3^{a_2} * 5^{a_3} * ... * p^{a_n}
     \end{equation}
     où les bases des exponents sont les nombres premiers.
 
     Du fait que chaque entier positif a une factorisation unique en nombres premiers, chaque liste
-    sera associé à un nombre unique superieur ou égal à 1.
+    sera associé à un nombre unique supérieur ou égal à 1.
 
-    Une autre chose à noter est que toutes les listes sont infinis: une liste avec n elements à réelement n
+    Une autre chose à noter est que toutes les listes sont infinis: une liste avec n éléments à réellement n
     éléments et une infinité de 0 qui suivent. En effet, les 0 à la fin d'une liste sont ignorés. 
-    Par exemple, la liste [2, 3, 4, 3, 2, 0, 0] est equivalente à [2, 3, 4, 3, 2]
+    Par exemple, les listes [2, 3, 0, 3, 2, 0, 0] et [2, 3, 0, 3, 2] sont équivalantes.
 
-    Dans le pseudo-code, on utilise la notation $P_i$ pour representer le i-ème nombre premier.	
+    Dans le pseudo-code, on utilise la notation $P_i$ pour représenter le i-ème nombre premier.	
     Voici quelques fonctions sur les listes dans cette nouvelle représentation:
 
     \begin{algorithm}[H]
@@ -67,9 +67,9 @@
         \begin{algorithmic}
         \Procedure{Dans?($r_1, r_2$)}{}
         \State $r_1 \gets \text{FALSE}$
-        \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{on utilise $r_1$ pour la limite max car taille de la liste est forcément inférieur}
+        \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{on utilise $r_1$ pour la limite max car taille de la liste est forcément inférieure}
             \If {$\textit{$r_1$} \mod \text{$P_{i}^{r_2}$} = 0$ $\textbf{and not}$ $\textit{$r_0$}$}
-                \State $\textit{N} \gets n / P_{i}^{r_2}$ \Comment{on enleve $r_1$ fois le même facteur premier}
+                \State $\textit{N} \gets n / P_{i}^{r_2}$ \Comment{on enlève $r_1$ fois le même facteur premier}
                 \If {$N \mod (P_{i}^{r_2}) \neq 0$} \Comment{on s'assure qu'il n'y a pas d'autre diviseurs}
                     \State $\textit{$r_1$} \gets \text{TRUE}$
                 \EndIf
@@ -103,7 +103,7 @@
         \end{algorithmic}
     \end{algorithm}
 
-    Pour la fonction retirer, je vais d'abord definir les macos auxiliaires 
+    Pour la fonction Retirer, je vais d'abord définir les macos auxiliaires 
     $IndexDe(r_2, r_1)$ et $index(r_2, r_1)$:
     \newline
     $IndexDe(r_2, r_1)$ retourne l'indice de l'élément $r_2$ dans la liste $r_1$.
@@ -114,7 +114,7 @@
         \caption{IndexDe}\label{IndexDe}
         \begin{algorithmic}
         \Procedure{IndexDe($r_2, r_1$)}{}
-        \State $\textit{$r_0$} \gets \text{-1}$ \Comment{on initialise l'indice à -1 qui signifie que l'élément n'est pas dans la liste}
+        \State $\textit{$r_0$} \gets \text{$r_1$}$ \Comment{on initialise l'indice à $r_1$ qui signifie que l'élément n'est pas dans la liste}
         \State $\textit{FOUND} \gets \text{FALSE}$
         \For {$i \gets 0$ \textbf{to} $r_1$}
             \If {\textbf{not} \text{FOUND}}
@@ -144,7 +144,7 @@
         \Procedure{Index($r_2, r_1$)}{}
         \State $\textit{$r_0$} \gets \text{0}$
         \State $\textit{$COPY$} \gets \text{$r_1$}$
-        \For {$i \gets 0$ \textbf{to} $r_1$}\Comment{On compte le nombre de fois que l'on peux enlever $P_{r_2}$ de $r_1$}
+        \For {$i \gets 0$ \textbf{to} $r_1$}\Comment{On compte le nombre de fois que l'on peut enlever $P_{r_2}$ de $r_1$}
             \If {$\textit{$COPY$} \mod P_{r_2} = 0$}
                 \State $\textit{$COPY$} \gets \textit{$COPY$} / P_{r_2}$
                 \State $\textit{$r_0$} \gets \textit{$r_0$} + 1$
@@ -154,20 +154,23 @@
         \end{algorithmic}
     \end{algorithm}
 
-    On peux maintenant utiliser ces macros dans la macro Retirer:
+    On peut maintenant utiliser ces macros dans la macro Retirer:
     
     \begin{algorithm}[H]
         \caption{Retirer}\label{Retirer}
         \begin{algorithmic}
         \Procedure{Retirer($r_2, r_1$)}{}
+        \State $\textit{$r_0$} \gets \text{$r_1$}$\Comment{Par défaut, on retourne juste la liste sans modification}
         \State $\textit{$IND$} \gets \textit{IndexDe($r_2$, $r_1$)}$
-        \State $\textit{$COPY$} \gets \textit{$r_1$} / P_{IND}^{r_2}$ \Comment{On met l'élément que l'on veut enlever à 0}
-        \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{On décale toutes les valeurs suivantes un indice à gauche}
-            \State $\textit{$VAL$} \gets \textit{Index(i + 1, COPY)}$
-            \State $\textit{$COPY$} \gets \textit{$COPY$} / P_{i + 1}^{VAL}$
-            \State $\textit{$COPY$} \gets \textit{$COPY$} * P_{i}^{VAL}$
-        \EndFor
-        \State $\textit{$r_0$} \gets COPY$
+        \If {$\textit{$IND$} \neq \text{$r_1$}$}\Comment{Si l'élément est dans la liste}
+            \State $\textit{$COPY$} \gets \textit{$r_1$} / P_{IND}^{r_2}$ \Comment{On met l'élément que l'on veut enlever à 0}
+            \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{On décale toutes les valeurs suivantes un indice à gauche}
+                \State $\textit{$VAL$} \gets \textit{Index(i + 1, COPY)}$
+                \State $\textit{$COPY$} \gets \textit{$COPY$} / P_{i + 1}^{VAL}$
+                \State $\textit{$COPY$} \gets \textit{$COPY$} * P_{i}^{VAL}$
+            \EndFor
+            \State $\textit{$r_0$} \gets COPY$
+        \EndIf
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
@@ -186,5 +189,108 @@
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
+
+    Pour représenter des ensembles d'ensembles, on peut utiliser une variante de l'algorithme précédent:
+    chaque liste interne est d'abord remplacée par son nombre, et on obtiens une liste simple.
+    Il suffit ensuite de calculer le nombre représentant la liste externe.
+
+    Pour décoder, on décode le nombre représentant la liste externe, puis on décode chaque liste interne.
+    \newline \newline
+    \textbf{2}
+    Montrez la croissance de $B_4(x)$ en fonction de $x$.
+    \newline    
+    Etape de base pour x = 1
+    \begin{equation}
+        B_4(1) = B_3(B_3(1)) = B_3(2^4-3) = B_3(2^{2^2}-3) = 2^{2^{2^2}} - 3
+    \end{equation}
+    Etape general pour x = x
+    \begin{equation} 
+        B_4(x) = B_3(B_3 ( ... B_3(1))) = B_3(B_3 ( ... B_3(2^2 - 3)))
+    \end{equation} 
+    avec x + 1 fois $B_3$ \newline
+    Etape d'induction pour x = x + 1
+    \begin{equation}
+        B_4(x+1) = B_3(B_3 ( ... B_3 (2^{2^2} - 3)))
+    \end{equation}
+    avec x + 1 fois $B_3$
+
+    On voit que chaque $B_3(x)$ ajoute un étage de plus à la tour de puissance de 2 dans l'argument. 
+    On peut donc confirmer qu'il y a x + 3 étages de 2 dans la tour de puissance de 2.
+
+    \textbf{3}
+    Le programme qui peut faire augmenter la variable "a" le plus rapidement est le suivant:
+    \begin{algorithm}[H]
+        \caption{Fast}\label{Fast}
+        \begin{algorithmic}
+        \Procedure{Fast()}{}
+        \State $\textit{inc(a)}$
+        \State $\textit{inc(a)}$
+        \State $\textit{inc(a)}$
+        \State $\textit{inc(a)}$ \Comment{a = 4}
+        \For {$i \gets 0$ \textbf{to} $a$}\Comment{Comme a $>$ 3, ca vaut le coup d'utiliser 3 lignes pour incrémenter a par plus que 3}
+            \State $\textit{inc(a)}$
+        \EndFor\Comment{a = 8}
+        \For {$i \gets 0$ \textbf{to} $a$}
+            \State $\textit{inc(a)}$
+        \EndFor\Comment{a = 16}
+        \For {$i \gets 0$ \textbf{to} $a$}
+            \State $\textit{inc(a)}$
+        \EndFor\Comment{a = 32}
+        \For {$i \gets 0$ \textbf{to} $a$}
+            \State $\textit{inc(a)}$
+        \EndFor
+        \dots
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    On voit bien que la variable "a" à une croissance exponentielle de base 2.
+    Le maximum que l'on peut augmenter la variable est de la doubler toutes les 3 lignes.
+    En effet, après $l$ lignes, "a" ne peut pas excéder $2^{(l / 3)}$.
+    Cela veut dire qu'un programme REPETERPASTROP ne peut jamais calculer $n^k$ si k est supérieur au
+    nombre de lignes divisé par 3.
+
+    \textbf{4}
+    Le fait de remplacer l'opération d'assignation par l'opération  d'interchangement ne change pase la puissance de calcul
+    L'opération d'assignation peut être remplacé par la macro suivante:
+    
+    \begin{algorithm}[H]
+        \caption{assign}\label{assign}
+        \begin{algorithmic}
+        \Procedure{Assign(a, b)}{}
+        \State $\textit{$a$} \leftarrow \rightarrow \textit{$c$}$
+        \For {$0$ \textbf{to} $b$}
+            \State $inc(a)$
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    La valeur c n'a pas été assigne donc il est égal à 0.
+    De plus, on choisit un registre different pour c à chaque fois que l'on veut utiliser la macro.
+    Comme on a un nombre illimité de registres, on peut utiliser la macro pour toutes les opérations d'assignation.
+    Le nouveau programme sera forcément plus long que le programme original mais il ne sera pas moins puissant.
+
+    \textbf{5}
+    La boucle POUR n'est pas plus puissante que la boucle REPETER car on peut utiliser une boucle REPETER pour
+    simuler une boucle POUR de la forme:\newline
+    POUR i $\leftarrow$ a à b faire $<bloc>$ suivant
+
+    \begin{algorithm}[H]
+        \caption{PourSimulation}\label{PourSimulation}
+        \begin{algorithmic}
+        \Procedure{PourSimulation}{}
+        \State $\textit{$i$} \gets a$
+        \State $\textit{$rep$} \gets MOINS(b, a)$\Comment{On utilise la macro MOINS pour être sur que le resultat est $\geq 0$}
+        \For {$0$ \textbf{to} $rep$}
+            \State $<bloc>$
+            \State $\textit{$i$} \gets i + 1$
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    Comme on peut remplacer toutes les boucles POUR par une boucle REPETER sans perdre de l'information, 
+    on déduit que la boucle POUR n'est pas plus puissante que la boucle REPETER, ce n'est simplement qu'un sucre syntaxique.
 
 \end{document} % This is the end of the document
