@@ -40,18 +40,18 @@
     Dans le pseudo-code, on utilise la notation $P_i$ pour representer le i-ème nombre premier.	
     Voici quelques fonctions sur les listes dans cette nouvelle représentation:
 
-    \begin{algorithm}
+    \begin{algorithm}[H]
         \caption{Vide}\label{Vide}
-        \begin{algorithmic}[1]
+        \begin{algorithmic}
         \Procedure{Vide()}{}
         \State $\textit{$r_0$} \gets \text{1}$
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}
+    \begin{algorithm}[H]
         \caption{EstVide?}\label{EstVide?}
-        \begin{algorithmic}[1]
+        \begin{algorithmic}
         \Procedure{EstVide?($r_1$)}{}
         \If {$\textit{$r_1$} = \text{1}$}
             \State $\textit{$r_0$} \gets \text{TRUE}$
@@ -62,9 +62,9 @@
         \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}
+    \begin{algorithm}[H]
         \caption{Dans?}\label{Dans?}
-        \begin{algorithmic}[1]
+        \begin{algorithmic}
         \Procedure{Dans?($r_1, r_2$)}{}
         \State $r_1 \gets \text{FALSE}$
         \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{on utilise $r_1$ pour la limite max car taille de la liste est forcément inférieur}
@@ -78,10 +78,10 @@
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
-
-    \begin{algorithm}
+    
+    \begin{algorithm}[H]
         \caption{Card}\label{Card}
-        \begin{algorithmic}[1]
+        \begin{algorithmic}
         \Procedure{Card($r_1$)}{}
         \State $\textit{$r_0$} \gets \text{0}$
         \For {$i \gets 0$ \textbf{to} $r_1$}
@@ -92,13 +92,97 @@
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
-
-    \begin{algorithm}
+    
+    \begin{algorithm}[H]IND
         \caption{Ajouter}\label{Ajouter}
-        \begin{algorithmic}[1]
+        \begin{algorithmic}
         \Procedure{Ajouter($r_2, r_1$)}{}
         \State $\textit{$SIZE$} \gets Card(r_1)$
         \State $\textit{$r_0$} \gets r_1 * P_{SIZE}^{r_2}$
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    Pour la fonction retirer, je vais d'abord definir les macos auxiliaires 
+    $IndexDe(r_2, r_1)$ et $index(r_2, r_1)$:
+    \newline
+    $IndexDe(r_2, r_1)$ retourne l'indice de l'élément $r_2$ dans la liste $r_1$.
+    \newline
+    $index(r_2, r_1)$ retourne l'élément à l'indice $r_2$ dans la liste $r_1$
+
+    \begin{algorithm}[H]
+        \caption{IndexDe}\label{IndexDe}
+        \begin{algorithmic}
+        \Procedure{IndexDe($r_2, r_1$)}{}
+        \State $\textit{$r_0$} \gets \text{-1}$ \Comment{on initialise l'indice à -1 qui signifie que l'élément n'est pas dans la liste}
+        \State $\textit{FOUND} \gets \text{FALSE}$
+        \For {$i \gets 0$ \textbf{to} $r_1$}
+            \If {\textbf{not} \text{FOUND}}
+                \State $\textit{COPY} \gets r_1$
+                \State $\textit{FLAG} \gets \text{TRUE}$ \Comment{Pouvait-on enlever $r_2$ instaces de $P_{i}$?}
+                \For {$j \gets 0$ \textbf{to} $r_2$}
+                    \If {$\textit{COPY} \mod P_{j} = 0$}
+                        \State $\textit{COPY} \gets \textit{COPY} / P_{j}$
+                    \Else
+                        \State $\textit{FLAG} \gets \text{FALSE}$
+                    \EndIf
+                \EndFor
+                
+                \If {$\textit{FLAG}$ $\textbf{and}$ $\textit{COPY} \mod P_{i} \neq 0$}\Comment {Si $P_{i}$ n'est plus un facteur de $COPY$}
+                    \State $\textit{FOUND} \gets \text{TRUE}$
+                    \State $\textit{$r_0$} \gets i$
+                \EndIf
+            \EndIf
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Index}\label{RetIndexirer}
+        \begin{algorithmic}
+        \Procedure{Index($r_2, r_1$)}{}
+        \State $\textit{$r_0$} \gets \text{0}$
+        \State $\textit{$COPY$} \gets \text{$r_1$}$
+        \For {$i \gets 0$ \textbf{to} $r_1$}\Comment{On compte le nombre de fois que l'on peux enlever $P_{r_2}$ de $r_1$}
+            \If {$\textit{$COPY$} \mod P_{r_2} = 0$}
+                \State $\textit{$COPY$} \gets \textit{$COPY$} / P_{r_2}$
+                \State $\textit{$r_0$} \gets \textit{$r_0$} + 1$
+            \EndIf
+        \EndFor
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    On peux maintenant utiliser ces macros dans la macro Retirer:
+    
+    \begin{algorithm}[H]
+        \caption{Retirer}\label{Retirer}
+        \begin{algorithmic}
+        \Procedure{Retirer($r_2, r_1$)}{}
+        \State $\textit{$IND$} \gets \textit{IndexDe($r_2$, $r_1$)}$
+        \State $\textit{$COPY$} \gets \textit{$r_1$} / P_{IND}^{r_2}$ \Comment{On met l'élément que l'on veut enlever à 0}
+        \For {$i \gets 0$ \textbf{to} $r_1$} \Comment{On décale toutes les valeurs suivantes un indice à gauche}
+            \State $\textit{$VAL$} \gets \textit{Index(i + 1, COPY)}$
+            \State $\textit{$COPY$} \gets \textit{$COPY$} / P_{i + 1}^{VAL}$
+            \State $\textit{$COPY$} \gets \textit{$COPY$} * P_{i}^{VAL}$
+        \EndFor
+        \State $\textit{$r_0$} \gets COPY$
+        \EndProcedure
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Inter}\label{Inter}
+        \begin{algorithmic}
+        \Procedure{Inter($r_1, r_2$)}{}
+        \State $\textit{$r_0$} \gets \text{1}$
+        \For {$i \gets 0$ \textbf{to} $r_1$}
+            \State $\textit{$VAL$} \gets \textit{Index($i, r_1$)}$
+            \If {$\textit{$Dans?(r_1, VAL)$}$ $\textbf{and not}$ $\textit{$Dans?(L, VAL)$}$} \Comment{Si l'élément est dans les deux listes et on l'a pas déjà écrit}
+                \State $\textit{$r_0$} \gets \textit{Ajouter($VAL, r_0$)}$
+            \EndIf
+        \EndFor
         \EndProcedure
         \end{algorithmic}
     \end{algorithm}
